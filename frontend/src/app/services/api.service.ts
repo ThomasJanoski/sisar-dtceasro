@@ -4,9 +4,20 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private baseUrl = 'http://127.0.0.1:8000/api';
+  private baseUrl: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+     const host = window.location.hostname;
+    
+    // Se estiver no PC local (localhost), usa a porta 8000. 
+    // Se estiver no servidor, não usa porta (usa a 443 do Nginx)
+    if (host === 'localhost' || host === '127.0.0.1') {
+      this.baseUrl = `http://${host}:8000/api`;
+    } else {
+      // No servidor, usamos o protocolo atual (https) e o host atual
+      this.baseUrl = `${window.location.origin}/api`;
+    }
+  }
 
   login(username: string, password: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/login`, { username, password });

@@ -1,5 +1,11 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
+# Arquivo de deploy
+deploy.sh
+
+# Logs e arquivos temporários de deploy
+*.log
+
 # Compiled output
 /dist
 /tmp
