@@ -64,6 +64,18 @@ import { ApiService } from '../services/api.service';
               <span class="label">Estante</span>
               <span class="value">{{ caixa.ESTANTE }}</span>
             </div>
+            <div class="info-row">
+              <span class="label">Data - Corrente</span>
+              <span class="value">{{ caixa.CORRENTE }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Data - Intermediário</span>
+              <span class="value">{{ caixa.INTERMEDIARIO }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Destinação Final</span>
+              <span class="value">{{ caixa.DESTFINAL }}</span>
+            </div>
           </div>
 
           <footer>
