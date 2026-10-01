@@ -1,0 +1,10 @@
+.list-container { padding: 2rem; }
+.toolbar { display: flex; gap: 1rem; margin-bottom: 2rem; }
+.toolbar input, .toolbar select { padding: 0.6rem; border-radius: 8px; border: 1px solid #ccc; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+.card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+
+.pagination { margin-top: 2rem; display: flex; justify-content: center; gap: 1rem; align-items: center; }
+.pagination button { padding: 0.5rem 1rem; cursor: pointer; background: #0066cc; color: white; border: none; border-radius: 4px; }
+.pagination button:disabled { background: #ccc; }

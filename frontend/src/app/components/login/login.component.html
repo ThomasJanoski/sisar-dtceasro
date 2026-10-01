@@ -1,0 +1,25 @@
+<div class="login-wrapper">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="login-card">
+    <div class="header">
+      <h2>SISAR</h2>
+      <p>Acesse o sistema de arquivos</p>
+    </div>
+
+    <div class="input-group">
+      <label>Usuário</label>
+      <input formControlName="usuario" placeholder="Digite seu login" [disabled]="isLoading()">
+    </div>
+
+    <div class="input-group">
+      <label>Senha</label>
+      <input type="password" formControlName="senha" placeholder="••••••••" [disabled]="isLoading()">
+    </div>
+
+    <button type="submit" [disabled]="form.invalid || isLoading()">
+      <span *ngIf="!isLoading()">Entrar</span>
+      <span *ngIf="isLoading()">Processando...</span>
+    </button>
+
+    <p class="error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
+  </form>
+</div>

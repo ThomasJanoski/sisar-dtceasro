@@ -1,0 +1,31 @@
+<div class="list-container">
+  <!-- Filtros -->
+  <div class="toolbar">
+    <select [(ngModel)]="filtros.tipo" (change)="carregarDados()">
+      <option value="">Todos os Tipos</option>
+      <option value="CORRENTE">Corrente</option>
+      <option value="INTERMEDIARIO">Intermediário</option>
+      <option value="ELIMINAÇÃO">Eliminação</option>
+      <option value="PERMANENTE">Permanente</option>
+    </select>
+    <input [(ngModel)]="filtros.ano" placeholder="Filtrar por Ano..." (input)="carregarDados()">
+  </div>
+
+  <!-- Lista -->
+  <div class="grid" *ngIf="!loading()">
+    <article *ngFor="let c of caixas()" class="card">
+      <h3>{{ c.CODIGO }}</h3>
+      <p><strong>Setor:</strong> {{ c.SETOR }} | <strong>Ano:</strong> {{ c.ANO }}</p>
+      <div class="card-footer">
+        <a [routerLink]="['/dashboard/caixas', c.ID, 'edit']" class="btn-edit">Editar</a>
+      </div>
+    </article>
+  </div>
+
+  <!-- Paginação -->
+  <div class="pagination" *ngIf="paginacao.last_page > 1">
+    <button [disabled]="paginacao.current_page === 1" (click)="carregarDados(paginacao.current_page - 1)">Anterior</button>
+    <span>Página {{ paginacao.current_page }} de {{ paginacao.last_page }}</span>
+    <button [disabled]="paginacao.current_page === paginacao.last_page" (click)="carregarDados(paginacao.current_page + 1)">Próximo</button>
+  </div>
+</div>

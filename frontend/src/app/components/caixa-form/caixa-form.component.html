@@ -1,0 +1,67 @@
+<div class="form-wrapper">
+  <header class="form-header">
+    <h2>{{ isEdit ? '✏️ Editar Caixa' : '➕ Nova Caixa' }}</h2>
+    <p>Preencha as informações abaixo para gerenciar o acervo.</p>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="card-form">
+    <div class="grid-form">
+      <!-- SETOR -->
+      <div class="field">
+        <label for="SETOR">Setor</label>
+        <input id="SETOR" formControlName="SETOR" [class.invalid]="errors.SETOR">
+        <small class="error-msg" *ngIf="errors.SETOR">{{ errors.SETOR[0] }}</small>
+      </div>
+
+      <!-- ANO -->
+      <div class="field">
+        <label for="ANO">Ano</label>
+        <input id="ANO" formControlName="ANO" [class.invalid]="errors.ANO">
+        <small class="error-msg" *ngIf="errors.ANO">{{ errors.ANO[0] }}</small>
+      </div>
+
+      <!-- ASSUNTO -->
+      <div class="field">
+        <label for="ASSUNTO">Assunto</label>
+        <input id="ASSUNTO" formControlName="ASSUNTO" [class.invalid]="errors.ASSUNTO">
+        <small class="error-msg" *ngIf="errors.ASSUNTO">{{ errors.ASSUNTO[0] }}</small>
+      </div>
+
+      <!-- CODIGO -->
+      <div class="field">
+        <label for="CODIGO">Código</label>
+        <input id="CODIGO" formControlName="CODIGO" [class.invalid]="errors.CODIGO">
+        <small class="error-msg" *ngIf="errors.CODIGO">{{ errors.CODIGO[0] }}</small>
+      </div>
+
+      <!-- TIPO -->
+      <div class="field">
+        <label for="TIPO">Tipo</label>
+        <select id="TIPO" formControlName="TIPO">
+          <option value="Corrente">Corrente</option>
+          <option value="INTERMEDIARIO">Intermediário</option>
+          <option value="ELIMINAÇÃO">Eliminação</option>
+          <option value="PERMANENTE">Permanente</option>
+        </select>
+      </div>
+
+      <!-- DESTINO FINAL -->
+      <div class="field">
+        <label for="DESTFINAL">Destinação Final</label>
+        <select id="DESTFINAL" formControlName="DESTFINAL">
+          <option value="CORRENTE">Corrente</option>
+          <option value="INTERMEDIARIO">Intermediário</option>
+          <option value="ELIMINAÇÃO">Eliminação</option>
+          <option value="PERMANENTE">Permanente</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn-secondary" routerLink="/dashboard/caixas">Cancelar</button>
+      <button type="submit" class="btn-primary" [disabled]="form.invalid">
+        {{ isEdit ? 'Atualizar Registro' : 'Cadastrar Caixa' }}
+      </button>
+    </div>
+  </form>
+</div>

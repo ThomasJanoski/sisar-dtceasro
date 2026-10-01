@@ -1,0 +1,14 @@
+<header class="navbar">
+  <div class="om-brand">
+    <strong>SISAR</strong> | <small>DTCEA-SRO / ST-06</small>
+  </div>
+  <button class="btn-logout" (click)="auth.logout()">Sair</button>
+</header>
+
+<div class="main-container">
+  <aside class="sidebar">
+    <a routerLink="caixas" routerLinkActive="active">📁 Consultar Caixas</a>
+    <a routerLink="caixas/new" routerLinkActive="active">➕ Nova Caixa</a>
+  </aside>
+  <main class="content"><router-outlet></router-outlet></main>
+</div>

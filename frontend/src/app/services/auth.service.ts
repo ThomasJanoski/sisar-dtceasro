@@ -1,38 +1,23 @@
+// src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from './api.service';
-import { tap } from 'rxjs';
+import { jwtDecode } from 'jwt-decode'; // npm install jwt-decode
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private router: Router) {}
 
-  login(usuario: string, senha: string) {
-    return this.api.login(usuario, senha).pipe(
-      tap((result) => {
-        localStorage.setItem('auth_token', result.token);
-      
-        const userName = result.user?.usuario;
-        localStorage.setItem('auth_user', userName);
-      })
-    );
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('auth_token');
+    if (!token) return false;
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded.exp * 1000 > Date.now();
+    } catch { return false; }
   }
 
-  logout(): void {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('auth_user');
+  logout() {
+    localStorage.clear();
     this.router.navigate(['/']);
-  }
-
-  get token(): string | null {
-    return localStorage.getItem('auth_token');
-  }
-
-  get userName(): string {
-    return localStorage.getItem('auth_user') ?? '';
-  }
-
-  get isAuthenticated(): boolean {
-    return !!this.token;
   }
 }

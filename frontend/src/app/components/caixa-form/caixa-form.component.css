@@ -1,0 +1,40 @@
+.form-wrapper { max-width: 800px; margin: 0 auto; padding: 2rem; }
+.form-header { margin-bottom: 2rem; }
+
+.card-form { 
+  background: white; padding: 2.5rem; border-radius: 16px; 
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.grid-form { 
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; 
+}
+
+.field { display: flex; flex-direction: column; }
+.field label { font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem; }
+
+input, select { 
+  padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 8px; 
+  font-size: 1rem; transition: border 0.2s;
+}
+
+input:focus { outline: none; border-color: #0066cc; }
+input.invalid { border-color: #dc2626; background-color: #fef2f2; }
+
+.error-msg { color: #dc2626; font-size: 0.75rem; margin-top: 0.3rem; }
+
+.actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; }
+
+.btn-primary { 
+  background: #0066cc; color: white; padding: 0.8rem 1.5rem; 
+  border: none; border-radius: 8px; cursor: pointer; font-weight: 600;
+}
+
+.btn-secondary { 
+  background: #f1f5f9; color: #475569; padding: 0.8rem 1.5rem; 
+  border: none; border-radius: 8px; cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .grid-form { grid-template-columns: 1fr; }
+}
