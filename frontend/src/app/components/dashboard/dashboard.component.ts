@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
@@ -11,36 +11,52 @@ import { AuthService } from '../../services/auth.service';
       <header class="topbar">
         <div class="brand-section">
           <span class="brand">🏛️ SISAR</span>
-          <span class="subtitle">Bem-vindo, <strong>{{ auth.userName }}</strong></span>
+          <span class="subtitle"
+            >Bem-vindo, <strong>{{ auth.userName }}</strong></span
+          >
         </div>
-        <button type="button" class="logout-btn" (click)="auth.logout()">
-          ↪️ Sair
-        </button>
+        <button type="button" class="logout-btn" (click)="auth.logout()">↪️ Sair</button>
       </header>
 
       <section class="actions">
-        <a routerLink="caixas" [queryParams]="{ tipo: 'Corrente' }" class="action-btn action-corrente">
+        <a
+          routerLink="caixas"
+          [queryParams]="{ tipo: 'Corrente' }"
+          class="action-btn action-corrente"
+        >
           <span class="icon">📋</span>
           <span class="text">
             <strong>Arquivo Corrente</strong>
             <small>Documentos ativos</small>
           </span>
         </a>
-        <a routerLink="caixas" [queryParams]="{ tipo: 'INTERMEDIARIO' }" class="action-btn action-intermediario">
+        <a
+          routerLink="caixas"
+          [queryParams]="{ tipo: 'INTERMEDIARIO' }"
+          class="action-btn action-intermediario"
+        >
           <span class="icon">📂</span>
           <span class="text">
             <strong>Intermediário</strong>
             <small>Transição</small>
           </span>
         </a>
-        <a routerLink="caixas" [queryParams]="{ tipo: 'ELIMINAÇÃO' }" class="action-btn action-eliminacao">
+        <a
+          routerLink="caixas"
+          [queryParams]="{ tipo: 'ELIMINAÇÃO' }"
+          class="action-btn action-eliminacao"
+        >
           <span class="icon">🗑️</span>
           <span class="text">
             <strong>Eliminação</strong>
             <small>Para destruir</small>
           </span>
         </a>
-        <a routerLink="caixas" [queryParams]="{ tipo: 'PERMANENTE' }" class="action-btn action-permanente">
+        <a
+          routerLink="caixas"
+          [queryParams]="{ tipo: 'PERMANENTE' }"
+          class="action-btn action-permanente"
+        >
           <span class="icon">🔒</span>
           <span class="text">
             <strong>Permanente</strong>
@@ -61,22 +77,23 @@ import { AuthService } from '../../services/auth.service';
       </main>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [
     `
-      .page { 
-        min-height: 100vh; 
+      .page {
+        min-height: 100vh;
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        padding: 1.5rem; 
+        padding: 1.5rem;
       }
 
-      .topbar { 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center; 
-        gap: 1rem; 
-        padding: 1.25rem 1.5rem; 
-        background: white; 
-        border-radius: 12px; 
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.25rem 1.5rem;
+        background: white;
+        border-radius: 12px;
         box-shadow: 0 10px 30px rgba(34, 60, 80, 0.1);
         margin-bottom: 1.5rem;
       }
@@ -87,14 +104,14 @@ import { AuthService } from '../../services/auth.service';
         gap: 0.25rem;
       }
 
-      .brand { 
-        display: block; 
-        font-weight: 800; 
+      .brand {
+        display: block;
+        font-weight: 800;
         font-size: 1.3rem;
         color: #0066cc;
       }
 
-      .subtitle { 
+      .subtitle {
         color: #6b7280;
         font-size: 0.9rem;
       }
@@ -116,20 +133,20 @@ import { AuthService } from '../../services/auth.service';
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
       }
 
-      .actions { 
+      .actions {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem; 
+        gap: 1rem;
         margin: 1.5rem 0;
       }
 
-      .action-btn { 
+      .action-btn {
         display: flex;
         align-items: center;
         gap: 1rem;
-        text-decoration: none; 
+        text-decoration: none;
         padding: 1.25rem;
-        border-radius: 12px; 
+        border-radius: 12px;
         background: white;
         color: #1f2937;
         border: 2px solid #e5e7eb;
@@ -215,8 +232,8 @@ import { AuthService } from '../../services/auth.service';
         box-shadow: 0 8px 24px rgba(79, 70, 229, 0.2);
       }
 
-      main { 
-        margin-top: 1rem; 
+      main {
+        margin-top: 1rem;
       }
 
       @media (max-width: 768px) {
@@ -229,8 +246,8 @@ import { AuthService } from '../../services/auth.service';
           grid-template-columns: 1fr;
         }
       }
-    `
-  ]
+    `,
+  ],
 })
 export class DashboardComponent {
   constructor(public auth: AuthService) {}

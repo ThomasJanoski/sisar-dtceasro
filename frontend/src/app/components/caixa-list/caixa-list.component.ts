@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -9,7 +9,8 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './caixa-list.component.html',
-  styleUrls: ['./caixa-list.component.css']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./caixa-list.component.css'],
 })
 export class CaixaListComponent implements OnInit {
   caixas = signal<any[]>([]);
@@ -19,17 +20,17 @@ export class CaixaListComponent implements OnInit {
   filtros = {
     tipo: '',
     ano: '',
-    page: 1
+    page: 1,
   };
 
   // Metadados da paginação do Laravel
   paginacao = {
     total: 0,
     last_page: 0,
-    current_page: 1
+    current_page: 1,
   };
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService) {}
 
   ngOnInit() {
     this.carregarDados();
@@ -49,10 +50,10 @@ export class CaixaListComponent implements OnInit {
         this.paginacao = {
           total: res.total,
           last_page: res.last_page,
-          current_page: res.current_page
+          current_page: res.current_page,
         };
         this.loading.set(false);
-      }
+      },
     });
   }
 }

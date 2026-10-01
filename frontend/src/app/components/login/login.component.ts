@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
@@ -9,17 +9,22 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   form: FormGroup;
   isLoading = signal(false);
   errorMessage = signal('');
 
-  constructor(private fb: FormBuilder, private api: ApiService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private api: ApiService,
+    private router: Router,
+  ) {
     this.form = this.fb.group({
       usuario: ['', Validators.required],
-      senha: ['', Validators.required]
+      senha: ['', Validators.required],
     });
   }
 
@@ -37,8 +42,10 @@ export class LoginComponent {
       },
       error: (err) => {
         this.isLoading.set(false);
-        this.errorMessage.set(err.status === 401 ? 'Usuário ou senha incorretos.' : 'Erro de conexão. Tente novamente.');
-      }
+        this.errorMessage.set(
+          err.status === 401 ? 'Usuário ou senha incorretos.' : 'Erro de conexão. Tente novamente.',
+        );
+      },
     });
   }
 }
