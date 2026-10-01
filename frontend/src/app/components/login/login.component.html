@@ -1,25 +1,49 @@
 <div class="login-wrapper">
   <form [formGroup]="form" (ngSubmit)="submit()" class="login-card">
-    <div class="header">
-      <h2>SISAR</h2>
-      <p>Acesse o sistema de arquivos</p>
+    <div class="login-brand">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span>
+        <strong>SISAR</strong>
+        <small>DTCEA-SRO</small>
+      </span>
+    </div>
+
+    <div class="login-heading">
+      <h1>Acessar o sistema</h1>
+      <p>Entre com suas credenciais institucionais.</p>
     </div>
 
     <div class="input-group">
-      <label>Usuário</label>
-      <input formControlName="usuario" placeholder="Digite seu login" [disabled]="isLoading()">
+      <label for="usuario">Usuário</label>
+      <input
+        id="usuario"
+        formControlName="usuario"
+        autocomplete="username"
+        placeholder="Digite seu usuário"
+      >
     </div>
 
     <div class="input-group">
-      <label>Senha</label>
-      <input type="password" formControlName="senha" placeholder="••••••••" [disabled]="isLoading()">
+      <label for="senha">Senha</label>
+      <input
+        id="senha"
+        type="password"
+        formControlName="senha"
+        autocomplete="current-password"
+        placeholder="Digite sua senha"
+      >
     </div>
 
-    <button type="submit" [disabled]="form.invalid || isLoading()">
+    <p class="status-message status-message--error" role="alert" *ngIf="errorMessage()">
+      {{ errorMessage() }}
+    </p>
+
+    <button class="submit-button" type="submit" [disabled]="form.invalid || isLoading()">
       <span *ngIf="!isLoading()">Entrar</span>
-      <span *ngIf="isLoading()">Processando...</span>
+      <span *ngIf="isLoading()" class="loading-label">
+        <span class="spinner" aria-hidden="true"></span>
+        Validando acesso...
+      </span>
     </button>
-
-    <p class="error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
   </form>
 </div>

@@ -1,7 +1,5 @@
-// src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode'; // npm install jwt-decode
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -9,11 +7,14 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     const token = localStorage.getItem('auth_token');
-    if (!token) return false;
-    try {
-      const decoded: any = jwtDecode(token);
-      return decoded.exp * 1000 > Date.now();
-    } catch { return false; }
+    
+    // O Sanctum apenas precisa saber se o token existe.
+    // A validação se ele expirou ou não acontece na API (401 Unauthorized)
+    return !!token; 
+  }
+
+  getUsername(): string | null {
+    return localStorage.getItem('auth_user');
   }
 
   logout() {

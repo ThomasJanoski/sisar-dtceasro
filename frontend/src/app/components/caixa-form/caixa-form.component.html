@@ -1,40 +1,46 @@
 <div class="form-wrapper">
   <header class="form-header">
-    <h2>{{ isEdit ? '✏️ Editar Caixa' : '➕ Nova Caixa' }}</h2>
+    <p class="eyebrow">{{ isEdit ? 'ATUALIZAÇÃO DO ACERVO' : 'NOVO REGISTRO' }}</p>
+    <h2>{{ isEdit ? 'Editar caixa' : 'Cadastrar caixa' }}</h2>
     <p>Preencha as informações abaixo para gerenciar o acervo.</p>
   </header>
 
-  <form [formGroup]="form" (ngSubmit)="submit()" class="card-form">
+  <div class="status-message loading-state" *ngIf="loading()" role="status" aria-live="polite">
+    <span class="spinner" aria-hidden="true"></span>
+    Carregando dados da caixa...
+  </div>
+
+  <div class="status-message status-message--error load-error" *ngIf="loadError()" role="alert">
+    <span>{{ loadError() }}</span>
+    <button type="button" class="btn-secondary" (click)="retryLoad()">Tentar novamente</button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="card-form" *ngIf="!loading() && !loadError()" [attr.aria-busy]="isSaving()">
     <div class="grid-form">
-      <!-- SETOR -->
       <div class="field">
-        <label for="SETOR">Setor</label>
-        <input id="SETOR" formControlName="SETOR" [class.invalid]="errors.SETOR">
-        <small class="error-msg" *ngIf="errors.SETOR">{{ errors.SETOR[0] }}</small>
+        <label for="SETOR">Setor <span aria-hidden="true">*</span></label>
+        <input id="SETOR" formControlName="SETOR" [class.invalid]="fieldError('SETOR')" [attr.aria-invalid]="fieldError('SETOR') ? 'true' : null" aria-describedby="SETOR-error">
+        <small class="error-msg" id="SETOR-error" role="alert" *ngIf="fieldError('SETOR')">{{ fieldError('SETOR') }}</small>
       </div>
 
-      <!-- ANO -->
       <div class="field">
-        <label for="ANO">Ano</label>
-        <input id="ANO" formControlName="ANO" [class.invalid]="errors.ANO">
-        <small class="error-msg" *ngIf="errors.ANO">{{ errors.ANO[0] }}</small>
+        <label for="ANO">Ano <span aria-hidden="true">*</span></label>
+        <input id="ANO" formControlName="ANO" inputmode="numeric" [class.invalid]="fieldError('ANO')" [attr.aria-invalid]="fieldError('ANO') ? 'true' : null" aria-describedby="ANO-error">
+        <small class="error-msg" id="ANO-error" role="alert" *ngIf="fieldError('ANO')">{{ fieldError('ANO') }}</small>
       </div>
 
-      <!-- ASSUNTO -->
       <div class="field">
         <label for="ASSUNTO">Assunto</label>
-        <input id="ASSUNTO" formControlName="ASSUNTO" [class.invalid]="errors.ASSUNTO">
-        <small class="error-msg" *ngIf="errors.ASSUNTO">{{ errors.ASSUNTO[0] }}</small>
+        <input id="ASSUNTO" formControlName="ASSUNTO" [class.invalid]="fieldError('ASSUNTO')">
+        <small class="error-msg" *ngIf="fieldError('ASSUNTO')">{{ fieldError('ASSUNTO') }}</small>
       </div>
 
-      <!-- CODIGO -->
       <div class="field">
-        <label for="CODIGO">Código</label>
-        <input id="CODIGO" formControlName="CODIGO" [class.invalid]="errors.CODIGO">
-        <small class="error-msg" *ngIf="errors.CODIGO">{{ errors.CODIGO[0] }}</small>
+        <label for="CODIGO">Código <span aria-hidden="true">*</span></label>
+        <input id="CODIGO" formControlName="CODIGO" [class.invalid]="fieldError('CODIGO')" [attr.aria-invalid]="fieldError('CODIGO') ? 'true' : null" aria-describedby="CODIGO-error">
+        <small class="error-msg" id="CODIGO-error" role="alert" *ngIf="fieldError('CODIGO')">{{ fieldError('CODIGO') }}</small>
       </div>
 
-      <!-- TIPO -->
       <div class="field">
         <label for="TIPO">Tipo</label>
         <select id="TIPO" formControlName="TIPO">
@@ -45,7 +51,6 @@
         </select>
       </div>
 
-      <!-- DESTINO FINAL -->
       <div class="field">
         <label for="DESTFINAL">Destinação Final</label>
         <select id="DESTFINAL" formControlName="DESTFINAL">
@@ -59,8 +64,9 @@
 
     <div class="actions">
       <button type="button" class="btn-secondary" routerLink="/dashboard/caixas">Cancelar</button>
-      <button type="submit" class="btn-primary" [disabled]="form.invalid">
-        {{ isEdit ? 'Atualizar Registro' : 'Cadastrar Caixa' }}
+      <button type="submit" class="btn-primary" [disabled]="isSaving()">
+        <span *ngIf="!isSaving()">{{ isEdit ? 'Salvar alterações' : 'Cadastrar caixa' }}</span>
+        <span *ngIf="isSaving()" class="loading-label"><span class="spinner" aria-hidden="true"></span>Salvando...</span>
       </button>
     </div>
   </form>

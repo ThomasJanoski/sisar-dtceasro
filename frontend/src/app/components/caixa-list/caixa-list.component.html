@@ -1,31 +1,84 @@
 <div class="list-container">
-  <!-- Filtros -->
-  <div class="toolbar">
-    <select [(ngModel)]="filtros.tipo" (change)="carregarDados()">
-      <option value="">Todos os Tipos</option>
-      <option value="CORRENTE">Corrente</option>
-      <option value="INTERMEDIARIO">Intermediário</option>
-      <option value="ELIMINAÇÃO">Eliminação</option>
-      <option value="PERMANENTE">Permanente</option>
-    </select>
-    <input [(ngModel)]="filtros.ano" placeholder="Filtrar por Ano..." (input)="carregarDados()">
+  <div class="list-heading">
+    <div>
+      <p class="eyebrow">CONSULTA</p>
+      <h2>Caixas do acervo</h2>
+      <p class="list-description" *ngIf="!loading() && !errorMessage()">
+        {{ paginacao.total }} {{ paginacao.total === 1 ? 'registro encontrado' : 'registros encontrados' }}
+      </p>
+    </div>
+    <a class="button-link" routerLink="/dashboard/caixas/new">Nova caixa</a>
   </div>
 
-  <!-- Lista -->
-  <div class="grid" *ngIf="!loading()">
+  <div class="toolbar" role="search" aria-label="Filtros das caixas">
+    <label class="filter-field">
+      <span>Tipo de arquivo</span>
+      <select [(ngModel)]="filtros.tipo" aria-label="Filtrar por tipo">
+        <option value="">Todos os tipos</option>
+        <option value="CORRENTE">Corrente</option>
+        <option value="INTERMEDIARIO">Intermediário</option>
+        <option value="ELIMINAÇÃO">Eliminação</option>
+        <option value="PERMANENTE">Permanente</option>
+      </select>
+    </label>
+    <label class="filter-field filter-field--year">
+      <span>Ano</span>
+      <input [(ngModel)]="filtros.ano" inputmode="numeric" placeholder="Ex.: 2026" aria-label="Filtrar por ano">
+    </label>
+    <button type="button" class="filter-button" (click)="carregarDados()">Filtrar</button>
+  </div>
+
+  <div class="status-message loading-state" *ngIf="loading()" role="status" aria-live="polite">
+    <span class="spinner" aria-hidden="true"></span>
+    Carregando caixas...
+  </div>
+
+  <div class="status-message status-message--error error-state" *ngIf="!loading() && errorMessage()" role="alert">
+    <span>{{ errorMessage() }}</span>
+    <button type="button" class="retry-button" (click)="carregarDados()">Tentar novamente</button>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading() && !errorMessage() && caixas().length === 0">
+    <span class="empty-mark" aria-hidden="true">—</span>
+    <h3>Nenhuma caixa encontrada</h3>
+    <p>Ajuste os filtros ou cadastre uma nova caixa no acervo.</p>
+    <a class="button-link" routerLink="/dashboard/caixas/new">Cadastrar caixa</a>
+  </div>
+
+  <div class="grid" *ngIf="!loading() && !errorMessage() && caixas().length > 0">
     <article *ngFor="let c of caixas()" class="card">
-      <h3>{{ c.CODIGO }}</h3>
-      <p><strong>Setor:</strong> {{ c.SETOR }} | <strong>Ano:</strong> {{ c.ANO }}</p>
-      <div class="card-footer">
-        <a [routerLink]="['/dashboard/caixas', c.ID, 'edit']" class="btn-edit">Editar</a>
+      <div class="card-heading">
+        <div class="card-heading-top">
+          <span class="card-type" [ngClass]="typeClass(c.TIPO)">{{ typeLabel(c.TIPO) }}</span>
+          <span class="record-id">Registro #{{ c.ID }}</span>
+        </div>
+        <h3>{{ c.CODIGO || 'Código não informado' }}</h3>
       </div>
+      <div class="migration-alert" *ngIf="migrationStatus(c) as status" [ngClass]="'migration-alert--' + status.severity" role="status">
+        <strong>{{ status.label }}</strong>
+        <p>{{ status.message }}</p>
+      </div>
+      <dl class="card-details">
+        <div><dt>Setor</dt><dd>{{ c.SETOR || 'Não informado' }}</dd></div>
+        <div><dt>Ano de referência</dt><dd>{{ c.ANO || 'Não informado' }}</dd></div>
+        <div class="detail-wide"><dt>Assunto</dt><dd>{{ c.ASSUNTO || 'Não informado' }}</dd></div>
+        <div><dt>Prazo corrente</dt><dd>{{ c.CORRENTE || 'Não informado' }}</dd></div>
+        <div><dt>Prazo intermediário</dt><dd>{{ c.INTERMEDIARIO || 'Não informado' }}</dd></div>
+        <div><dt>Destinação final</dt><dd>{{ c.DESTFINAL || 'Não informado' }}</dd></div>
+        <div><dt>Número da caixa</dt><dd>{{ c.NCAIXA ?? 'Não informado' }}</dd></div>
+        <div><dt>Estante</dt><dd>{{ c.ESTANTE ?? 'Não informado' }}</dd></div>
+      </dl>
+      <dl class="card-meta">
+        <div><dt>Cadastrada</dt><dd>{{ c.created_at ? (c.created_at | date:'dd/MM/yyyy HH:mm') : 'Não informado' }}</dd></div>
+        <div><dt>Atualizada</dt><dd>{{ c.updated_at ? (c.updated_at | date:'dd/MM/yyyy HH:mm') : 'Não informado' }}</dd></div>
+      </dl>
+      <a [routerLink]="['/dashboard/caixas', c.ID, 'edit']" class="edit-link">Editar registro</a>
     </article>
   </div>
 
-  <!-- Paginação -->
-  <div class="pagination" *ngIf="paginacao.last_page > 1">
-    <button [disabled]="paginacao.current_page === 1" (click)="carregarDados(paginacao.current_page - 1)">Anterior</button>
+  <div class="pagination" *ngIf="!loading() && !errorMessage() && paginacao.last_page > 1">
+    <button type="button" [disabled]="paginacao.current_page === 1" (click)="carregarDados(paginacao.current_page - 1)">Anterior</button>
     <span>Página {{ paginacao.current_page }} de {{ paginacao.last_page }}</span>
-    <button [disabled]="paginacao.current_page === paginacao.last_page" (click)="carregarDados(paginacao.current_page + 1)">Próximo</button>
+    <button type="button" [disabled]="paginacao.current_page === paginacao.last_page" (click)="carregarDados(paginacao.current_page + 1)">Próxima</button>
   </div>
 </div>

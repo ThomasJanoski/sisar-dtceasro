@@ -1,14 +1,68 @@
-<header class="navbar">
-  <div class="om-brand">
-    <strong>SISAR</strong> | <small>DTCEA-SRO / ST-06</small>
-  </div>
-  <button class="btn-logout" (click)="auth.logout()">Sair</button>
-</header>
+<div class="dashboard-shell">
+  <header class="topbar">
+    <a class="brand" routerLink="/dashboard" aria-label="SISAR, página inicial">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span class="brand-copy">
+        <strong>SISAR</strong>
+        <small>DTCEA-SRO</small>
+      </span>
+    </a>
 
-<div class="main-container">
-  <aside class="sidebar">
-    <a routerLink="caixas" routerLinkActive="active">📁 Consultar Caixas</a>
-    <a routerLink="caixas/new" routerLinkActive="active">➕ Nova Caixa</a>
-  </aside>
-  <main class="content"><router-outlet></router-outlet></main>
+    <div class="user-controls">
+      <span class="welcome">Bem-vindo, <strong>{{ auth.getUsername() || 'usuário' }}</strong></span>
+      <button type="button" class="logout-btn" (click)="auth.logout()">Sair</button>
+    </div>
+  </header>
+
+  <main class="dashboard-content">
+    <section class="page-heading" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">GESTÃO DOCUMENTAL</p>
+        <h1 id="page-title">Acervo institucional</h1>
+        <p class="page-description">Consulte e organize as caixas do arquivo.</p>
+      </div>
+    </section>
+
+    <nav class="actions" aria-label="Acesso rápido ao acervo">
+      <a routerLink="caixas" [queryParams]="{ tipo: 'Corrente' }" class="action-btn">
+        <span class="action-mark action-mark--current" aria-hidden="true">C</span>
+        <span class="action-copy">
+          <strong>Arquivo corrente</strong>
+          <small>Documentos ativos</small>
+        </span>
+      </a>
+      <a routerLink="caixas" [queryParams]="{ tipo: 'INTERMEDIARIO' }" class="action-btn">
+        <span class="action-mark action-mark--intermediate" aria-hidden="true">I</span>
+        <span class="action-copy">
+          <strong>Intermediário</strong>
+          <small>Documentos em transição</small>
+        </span>
+      </a>
+      <a routerLink="caixas" [queryParams]="{ tipo: 'ELIMINAÇÃO' }" class="action-btn">
+        <span class="action-mark action-mark--elimination" aria-hidden="true">E</span>
+        <span class="action-copy">
+          <strong>Eliminação</strong>
+          <small>Destinação documental</small>
+        </span>
+      </a>
+      <a routerLink="caixas" [queryParams]="{ tipo: 'PERMANENTE' }" class="action-btn">
+        <span class="action-mark action-mark--permanent" aria-hidden="true">P</span>
+        <span class="action-copy">
+          <strong>Permanente</strong>
+          <small>Arquivo histórico</small>
+        </span>
+      </a>
+      <a routerLink="caixas/new" class="action-btn action-btn--add">
+        <span class="action-mark action-mark--add" aria-hidden="true">+</span>
+        <span class="action-copy">
+          <strong>Nova caixa</strong>
+          <small>Cadastrar documento</small>
+        </span>
+      </a>
+    </nav>
+
+    <section class="workspace" aria-label="Conteúdo do acervo">
+      <router-outlet></router-outlet>
+    </section>
+  </main>
 </div>

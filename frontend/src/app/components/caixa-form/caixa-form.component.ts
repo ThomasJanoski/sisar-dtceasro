@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   standalone: true,
@@ -14,12 +15,16 @@ export class CaixaFormComponent implements OnInit {
   form: FormGroup;
   isEdit = false;
   errors: any = {};
+  loading = signal(false);
+  isSaving = signal(false);
+  loadError = signal('');
 
   constructor(
     private fb: FormBuilder,
     private api: ApiService,
     private route: ActivatedRoute,
     private router: Router,
+    private toast: ToastService,
   ) {
     this.form = this.fb.group({
       SETOR: ['', Validators.required],
@@ -39,21 +44,61 @@ export class CaixaFormComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEdit = true;
-      this.api.getCaixa(+id).subscribe((data) => this.form.patchValue(data));
+      this.loadRecord(+id);
     }
   }
 
+  fieldError(field: string): string {
+    return this.errors[field]?.[0]
+      ?? (this.form.get(field)?.invalid && this.form.get(field)?.touched ? 'Campo obrigatório.' : '');
+  }
+
+  loadRecord(id: number) {
+    this.loading.set(true);
+    this.loadError.set('');
+    this.api.getCaixa(id).subscribe({
+      next: (data) => {
+        this.form.patchValue(data);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+        this.loadError.set('Não foi possível carregar esta caixa. Tente novamente.');
+        this.toast.error('Falha ao carregar a caixa para edição.');
+      },
+    });
+  }
+
+  retryLoad() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) this.loadRecord(+id);
+  }
+
   submit() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     const action = this.isEdit
       ? this.api.updateCaixa(this.route.snapshot.params['id'], this.form.value)
       : this.api.createCaixa(this.form.value);
 
+    this.isSaving.set(true);
+    this.errors = {};
     action.subscribe({
-      next: () => this.router.navigate(['/dashboard/caixas']),
+      next: () => {
+        this.toast.success(this.isEdit ? 'Caixa atualizada com sucesso.' : 'Caixa cadastrada com sucesso.');
+        this.router.navigate(['/dashboard/caixas']);
+      },
       error: (err) => {
-        if (err.status === 422) this.errors = err.error.errors; // Exibe erros do Laravel
+        this.isSaving.set(false);
+        if (err.status === 422) {
+          this.errors = err.error.errors ?? {};
+          this.toast.error('Revise os campos destacados antes de salvar.');
+        } else {
+          this.toast.error('Não foi possível salvar a caixa. Tente novamente.');
+        }
       },
     });
   }
