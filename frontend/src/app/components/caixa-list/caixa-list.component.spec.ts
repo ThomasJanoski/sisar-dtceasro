@@ -1,5 +1,6 @@
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
+import { ConfirmService } from '../../services/confirm.service';
 import { ToastService } from '../../services/toast.service';
 import { CaixaListComponent } from './caixa-list.component';
 
@@ -8,6 +9,7 @@ describe('CaixaListComponent migrationStatus', () => {
     {} as ApiService,
     {} as ActivatedRoute,
     {} as ToastService,
+    new ConfirmService(),
   );
 
   it('warns when the current-stage period ends this year', () => {

@@ -15,36 +15,58 @@
     <button type="button" class="btn-secondary" (click)="retryLoad()">Tentar novamente</button>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="submit()" class="card-form" *ngIf="!loading() && !loadError()" [attr.aria-busy]="isSaving()">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="card-form" *ngIf="!loading() && !loadError()"
+    [attr.aria-busy]="isSaving()">
     <div class="grid-form">
       <div class="field">
         <label for="SETOR">Setor <span aria-hidden="true">*</span></label>
-        <input id="SETOR" formControlName="SETOR" [class.invalid]="fieldError('SETOR')" [attr.aria-invalid]="fieldError('SETOR') ? 'true' : null" aria-describedby="SETOR-error">
-        <small class="error-msg" id="SETOR-error" role="alert" *ngIf="fieldError('SETOR')">{{ fieldError('SETOR') }}</small>
+        <input id="SETOR" formControlName="SETOR" placeholder="Ex: RH" [class.invalid]="fieldError('SETOR')"
+          [attr.aria-invalid]="fieldError('SETOR') ? 'true' : null" aria-describedby="SETOR-error">
+        <small class="error-msg" id="SETOR-error" role="alert" *ngIf="fieldError('SETOR')">{{ fieldError('SETOR')
+          }}</small>
       </div>
 
       <div class="field">
         <label for="ANO">Ano <span aria-hidden="true">*</span></label>
-        <input id="ANO" formControlName="ANO" inputmode="numeric" [class.invalid]="fieldError('ANO')" [attr.aria-invalid]="fieldError('ANO') ? 'true' : null" aria-describedby="ANO-error">
+        <input id="ANO" formControlName="ANO" placeholder="Ex: 2026" inputmode="numeric" [class.invalid]="fieldError('ANO')"
+          [attr.aria-invalid]="fieldError('ANO') ? 'true' : null" aria-describedby="ANO-error">
         <small class="error-msg" id="ANO-error" role="alert" *ngIf="fieldError('ANO')">{{ fieldError('ANO') }}</small>
+      </div>
+
+      <!-- Input CORRENTE -->
+      <div class="field">
+        <label for="CORRENTE">Prazo Corrente <span aria-hidden="true">*</span></label>
+        <input id="CORRENTE" formControlName="CORRENTE" placeholder="Ex: 2026-2030" ...>
+        <small class="error-msg" id="CORRENTE-error" role="alert" *ngIf="fieldError('CORRENTE')">{{
+          fieldError('CORRENTE') }}</small>
+      </div>
+
+      <!-- Input INTERMEDIARIO -->
+      <div class="field">
+        <label for="INTERMEDIARIO">Prazo Intermediário <span aria-hidden="true">*</span></label>
+        <input id="INTERMEDIARIO" formControlName="INTERMEDIARIO" placeholder="Ex: 2026-2030" ...>
+        <small class="error-msg" id="INTERMEDIARIO-error" role="alert" *ngIf="fieldError('INTERMEDIARIO')">{{
+          fieldError('INTERMEDIARIO') }}</small>
       </div>
 
       <div class="field">
         <label for="ASSUNTO">Assunto</label>
-        <input id="ASSUNTO" formControlName="ASSUNTO" [class.invalid]="fieldError('ASSUNTO')">
+        <input id="ASSUNTO" formControlName="ASSUNTO" placeholder="Ex: Reunião de equipe" [class.invalid]="fieldError('ASSUNTO')">
         <small class="error-msg" *ngIf="fieldError('ASSUNTO')">{{ fieldError('ASSUNTO') }}</small>
       </div>
 
       <div class="field">
         <label for="CODIGO">Código <span aria-hidden="true">*</span></label>
-        <input id="CODIGO" formControlName="CODIGO" [class.invalid]="fieldError('CODIGO')" [attr.aria-invalid]="fieldError('CODIGO') ? 'true' : null" aria-describedby="CODIGO-error">
-        <small class="error-msg" id="CODIGO-error" role="alert" *ngIf="fieldError('CODIGO')">{{ fieldError('CODIGO') }}</small>
+        <input id="CODIGO" formControlName="CODIGO" placeholder="Ex: 191.4" [class.invalid]="fieldError('CODIGO')"
+          [attr.aria-invalid]="fieldError('CODIGO') ? 'true' : null" aria-describedby="CODIGO-error">
+        <small class="error-msg" id="CODIGO-error" role="alert" *ngIf="fieldError('CODIGO')">{{ fieldError('CODIGO')
+          }}</small>
       </div>
 
       <div class="field">
         <label for="TIPO">Tipo</label>
         <select id="TIPO" formControlName="TIPO">
-          <option value="Corrente">Corrente</option>
+          <option value="CORRENTE">Corrente</option>
           <option value="INTERMEDIARIO">Intermediário</option>
           <option value="ELIMINAÇÃO">Eliminação</option>
           <option value="PERMANENTE">Permanente</option>
@@ -62,11 +84,12 @@
       </div>
     </div>
 
-    <div class="actions">
+    <div class="actions" style="margin-top: 1.5rem">
       <button type="button" class="btn-secondary" routerLink="/dashboard/caixas">Cancelar</button>
-      <button type="submit" class="btn-primary" [disabled]="isSaving()">
+      <button style="margin-left: 1rem" type="submit" class="btn-primary" [disabled]="isSaving()">
         <span *ngIf="!isSaving()">{{ isEdit ? 'Salvar alterações' : 'Cadastrar caixa' }}</span>
-        <span *ngIf="isSaving()" class="loading-label"><span class="spinner" aria-hidden="true"></span>Salvando...</span>
+        <span *ngIf="isSaving()" class="loading-label"><span class="spinner"
+            aria-hidden="true"></span>Salvando...</span>
       </button>
     </div>
   </form>

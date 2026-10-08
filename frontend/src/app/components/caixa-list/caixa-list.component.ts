@@ -5,6 +5,7 @@ import { ToastService } from '../../services/toast.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ConfirmService } from '../../services/confirm.service';
 
 interface Caixa {
   ID: number;
@@ -33,6 +34,7 @@ interface Caixa {
 export class CaixaListComponent implements OnInit {
   caixas = signal<Caixa[]>([]);
   loading = signal(true);
+  deleting = signal(false);
   errorMessage = signal('');
 
   // Filtros
@@ -53,7 +55,8 @@ export class CaixaListComponent implements OnInit {
     private api: ApiService,
     private route: ActivatedRoute,
     private toast: ToastService,
-  ) {}
+    private confirmService: ConfirmService,
+  ) { }
 
   ngOnInit() {
     this.route.queryParamMap.subscribe((params) => {
@@ -85,6 +88,29 @@ export class CaixaListComponent implements OnInit {
         this.toast.error('Falha ao carregar as caixas.');
       },
     });
+  }
+
+  async prepararExclusao(c: Caixa) {
+    // A chamada do service retorna uma Promise que espera o clique no modal
+    const confirmado = await this.confirmService.confirm(
+      'Confirmar exclusão',
+      'Tem certeza que deseja excluir esta caixa?'
+    );
+
+    if (confirmado && !this.deleting()) {
+      this.deleting.set(true);
+      this.api.deleteCaixa(c.ID).subscribe({
+        next: () => {
+          this.deleting.set(false);
+          this.toast.success('Caixa excluída com sucesso.');
+          this.carregarDados();
+        },
+        error: () => {
+          this.deleting.set(false);
+          this.toast.error('Erro ao excluir.');
+        },
+      });
+    }
   }
 
   typeClass(type: string | null | undefined): string {

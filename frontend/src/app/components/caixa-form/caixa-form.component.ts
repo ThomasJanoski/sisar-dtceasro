@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
@@ -11,6 +11,7 @@ import { ToastService } from '../../services/toast.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './caixa-form.component.html',
 })
+
 export class CaixaFormComponent implements OnInit {
   form: FormGroup;
   isEdit = false;
@@ -28,7 +29,9 @@ export class CaixaFormComponent implements OnInit {
   ) {
     this.form = this.fb.group({
       SETOR: ['', Validators.required],
-      ANO: ['', Validators.required],
+      ANO: ['', [Validators.required, Validators.pattern(/^\d{4}$/)]], // Apenas um ano
+      CORRENTE: ['', [Validators.required, this.anoPeriodoValidator()]],
+      INTERMEDIARIO: ['', [Validators.required, this.anoPeriodoValidator()]],
       ASSUNTO: [''],
       CODIGO: ['', Validators.required],
       TIPO: ['Corrente'],
@@ -49,8 +52,13 @@ export class CaixaFormComponent implements OnInit {
   }
 
   fieldError(field: string): string {
-    return this.errors[field]?.[0]
-      ?? (this.form.get(field)?.invalid && this.form.get(field)?.touched ? 'Campo obrigatório.' : '');
+    const control = this.form.get(field);
+    if (control?.invalid && control?.touched) {
+      if (control.errors?.['required']) return 'Campo obrigatório.';
+      if (control.errors?.['invalidFormat']) return 'Use o formato AAAA ou AAAA-AAAA.';
+      if (control.errors?.['pattern']) return 'Ano inválido (ex: 2026).';
+    }
+    return this.errors[field]?.[0] || '';
   }
 
   loadRecord(id: number) {
@@ -101,5 +109,16 @@ export class CaixaFormComponent implements OnInit {
         }
       },
     });
+  }
+
+  anoPeriodoValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (!value) return null;
+
+      // Regex: 4 dígitos, opcionalmente seguidos por hífen e mais 4 dígitos
+      const regex = /^\d{4}(-\d{4})?$/;
+      return regex.test(value) ? null : { invalidFormat: true };
+    };
   }
 }

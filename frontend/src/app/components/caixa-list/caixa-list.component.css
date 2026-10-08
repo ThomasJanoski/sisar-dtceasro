@@ -43,6 +43,29 @@
 	transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
 }
 
+.card-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color, #eee);
+}
+
+.delete-link {
+  background: none;
+  border: none;
+  color: #dc3545; /* Vermelho padrão para ações destrutivas */
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.delete-link:hover {
+  color: #a71d2a;
+}
+
 .button-link {
 	background: var(--primary);
 	color: white;
@@ -179,6 +202,15 @@
 	border-right-color: transparent;
 	border-radius: 50%;
 	animation: spin 700ms linear infinite;
+}
+
+.delete-progress-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 100000;
+	display: grid;
+	place-items: center;
+	background: rgb(29 48 54 / 35%);
 }
 
 .error-state {

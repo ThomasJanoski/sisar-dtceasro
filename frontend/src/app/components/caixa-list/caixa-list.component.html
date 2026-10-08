@@ -54,31 +54,80 @@
         </div>
         <h3>{{ c.CODIGO || 'Código não informado' }}</h3>
       </div>
-      <div class="migration-alert" *ngIf="migrationStatus(c) as status" [ngClass]="'migration-alert--' + status.severity" role="status">
+      <div class="migration-alert" *ngIf="migrationStatus(c) as status"
+        [ngClass]="'migration-alert--' + status.severity" role="status">
         <strong>{{ status.label }}</strong>
         <p>{{ status.message }}</p>
       </div>
       <dl class="card-details">
-        <div><dt>Setor</dt><dd>{{ c.SETOR || 'Não informado' }}</dd></div>
-        <div><dt>Ano de referência</dt><dd>{{ c.ANO || 'Não informado' }}</dd></div>
-        <div class="detail-wide"><dt>Assunto</dt><dd>{{ c.ASSUNTO || 'Não informado' }}</dd></div>
-        <div><dt>Prazo corrente</dt><dd>{{ c.CORRENTE || 'Não informado' }}</dd></div>
-        <div><dt>Prazo intermediário</dt><dd>{{ c.INTERMEDIARIO || 'Não informado' }}</dd></div>
-        <div><dt>Destinação final</dt><dd>{{ c.DESTFINAL || 'Não informado' }}</dd></div>
-        <div><dt>Número da caixa</dt><dd>{{ c.NCAIXA ?? 'Não informado' }}</dd></div>
-        <div><dt>Estante</dt><dd>{{ c.ESTANTE ?? 'Não informado' }}</dd></div>
+        <div>
+          <dt>Setor</dt>
+          <dd>{{ c.SETOR || 'Não informado' }}</dd>
+        </div>
+        <div>
+          <dt>Ano de referência</dt>
+          <dd>{{ c.ANO || 'Não informado' }}</dd>
+        </div>
+        <div class="detail-wide">
+          <dt>Assunto</dt>
+          <dd>{{ c.ASSUNTO || 'Não informado' }}</dd>
+        </div>
+        <div>
+          <dt>Prazo corrente</dt>
+          <dd>{{ c.CORRENTE || 'Não informado' }}</dd>
+        </div>
+        <div>
+          <dt>Prazo intermediário</dt>
+          <dd>{{ c.INTERMEDIARIO || 'Não informado' }}</dd>
+        </div>
+        <div>
+          <dt>Destinação final</dt>
+          <dd>{{ c.DESTFINAL || 'Não informado' }}</dd>
+        </div>
+        <div>
+          <dt>Número da caixa</dt>
+          <dd>{{ c.NCAIXA ?? 'Não informado' }}</dd>
+        </div>
+        <div>
+          <dt>Estante</dt>
+          <dd>{{ c.ESTANTE ?? 'Não informado' }}</dd>
+        </div>
       </dl>
       <dl class="card-meta">
-        <div><dt>Cadastrada</dt><dd>{{ c.created_at ? (c.created_at | date:'dd/MM/yyyy HH:mm') : 'Não informado' }}</dd></div>
-        <div><dt>Atualizada</dt><dd>{{ c.updated_at ? (c.updated_at | date:'dd/MM/yyyy HH:mm') : 'Não informado' }}</dd></div>
+        <div>
+          <dt>Cadastrada</dt>
+          <dd>{{ c.created_at ? (c.created_at | date:'dd/MM/yyyy HH:mm') : 'Não informado' }}</dd>
+        </div>
+        <div>
+          <dt>Atualizada</dt>
+          <dd>{{ c.updated_at ? (c.updated_at | date:'dd/MM/yyyy HH:mm') : 'Não informado' }}</dd>
+        </div>
       </dl>
-      <a [routerLink]="['/dashboard/caixas', c.ID, 'edit']" class="edit-link">Editar registro</a>
+      <div class="card-actions">
+        <a [routerLink]="['/dashboard/caixas', c.ID, 'edit']" class="edit-link">Editar</a>
+        <button type="button" class="delete-link" (click)="prepararExclusao(c)">
+          Excluir
+        </button>
+      </div>
     </article>
   </div>
 
   <div class="pagination" *ngIf="!loading() && !errorMessage() && paginacao.last_page > 1">
-    <button type="button" [disabled]="paginacao.current_page === 1" (click)="carregarDados(paginacao.current_page - 1)">Anterior</button>
+    <button type="button" [disabled]="paginacao.current_page === 1"
+      (click)="carregarDados(paginacao.current_page - 1)">Anterior</button>
     <span>Página {{ paginacao.current_page }} de {{ paginacao.last_page }}</span>
-    <button type="button" [disabled]="paginacao.current_page === paginacao.last_page" (click)="carregarDados(paginacao.current_page + 1)">Próxima</button>
+    <button type="button" [disabled]="paginacao.current_page === paginacao.last_page"
+      (click)="carregarDados(paginacao.current_page + 1)">Próxima</button>
+  </div>
+
+  <div class="delete-progress-overlay" *ngIf="deleting()" role="status" aria-live="polite" aria-atomic="true">
+    <div class="status-message loading-state">
+      <span class="spinner" aria-hidden="true"></span>
+      <div>
+        <strong>Excluindo caixa...</strong>
+        <br>
+        Por favor, aguarde.
+      </div>
+    </div>
   </div>
 </div>
