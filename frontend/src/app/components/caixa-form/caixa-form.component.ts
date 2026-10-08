@@ -34,8 +34,10 @@ export class CaixaFormComponent implements OnInit {
       INTERMEDIARIO: ['', [Validators.required, this.anoPeriodoValidator()]],
       ASSUNTO: [''],
       CODIGO: ['', Validators.required],
-      TIPO: ['Corrente'],
-      DESTFINAL: [''],
+      NCAIXA: [null, [Validators.required]],
+      ESTANTE: [null, [Validators.required]],
+      TIPO: ['CORRENTE'],
+      DESTFINAL: ['ELIMINAÇÃO'],
     });
   }
 

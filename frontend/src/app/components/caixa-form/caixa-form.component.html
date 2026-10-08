@@ -28,8 +28,9 @@
 
       <div class="field">
         <label for="ANO">Ano <span aria-hidden="true">*</span></label>
-        <input id="ANO" formControlName="ANO" placeholder="Ex: 2026" inputmode="numeric" [class.invalid]="fieldError('ANO')"
-          [attr.aria-invalid]="fieldError('ANO') ? 'true' : null" aria-describedby="ANO-error">
+        <input id="ANO" formControlName="ANO" placeholder="Ex: 2026" inputmode="numeric"
+          [class.invalid]="fieldError('ANO')" [attr.aria-invalid]="fieldError('ANO') ? 'true' : null"
+          aria-describedby="ANO-error">
         <small class="error-msg" id="ANO-error" role="alert" *ngIf="fieldError('ANO')">{{ fieldError('ANO') }}</small>
       </div>
 
@@ -51,7 +52,8 @@
 
       <div class="field">
         <label for="ASSUNTO">Assunto</label>
-        <input id="ASSUNTO" formControlName="ASSUNTO" placeholder="Ex: Reunião de equipe" [class.invalid]="fieldError('ASSUNTO')">
+        <input id="ASSUNTO" formControlName="ASSUNTO" placeholder="Ex: Reunião de equipe"
+          [class.invalid]="fieldError('ASSUNTO')">
         <small class="error-msg" *ngIf="fieldError('ASSUNTO')">{{ fieldError('ASSUNTO') }}</small>
       </div>
 
@@ -61,6 +63,28 @@
           [attr.aria-invalid]="fieldError('CODIGO') ? 'true' : null" aria-describedby="CODIGO-error">
         <small class="error-msg" id="CODIGO-error" role="alert" *ngIf="fieldError('CODIGO')">{{ fieldError('CODIGO')
           }}</small>
+      </div>
+
+      <!-- Input NCAIXA -->
+      <div class="field">
+        <label for="NCAIXA">Nº da Caixa <span aria-hidden="true">*</span></label>
+        <input id="NCAIXA" type="number" formControlName="NCAIXA" placeholder="Ex: 10" inputmode="numeric"
+          [class.invalid]="fieldError('NCAIXA')" [attr.aria-invalid]="fieldError('NCAIXA') ? 'true' : null"
+          aria-describedby="NCAIXA-error">
+        <small class="error-msg" id="NCAIXA-error" role="alert" *ngIf="fieldError('NCAIXA')">
+          {{ fieldError('NCAIXA') }}
+        </small>
+      </div>
+
+      <!-- Input ESTANTE -->
+      <div class="field">
+        <label for="ESTANTE">Estante <span aria-hidden="true">*</span></label>
+        <input id="ESTANTE" type="number" formControlName="ESTANTE" placeholder="Ex: 5" inputmode="numeric"
+          [class.invalid]="fieldError('ESTANTE')" [attr.aria-invalid]="fieldError('ESTANTE') ? 'true' : null"
+          aria-describedby="ESTANTE-error">
+        <small class="error-msg" id="ESTANTE-error" role="alert" *ngIf="fieldError('ESTANTE')">
+          {{ fieldError('ESTANTE') }}
+        </small>
       </div>
 
       <div class="field">
